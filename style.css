@@ -1,0 +1,10 @@
+@import url();
+
+body {
+    margin: 0;
+    height: 100vh;
+    width: 100vh;
+
+    background-image: linear-gradient(to right top, #9AE5A8, #4DB8A7, #248997, #2A5A74, #283044);
+
+}

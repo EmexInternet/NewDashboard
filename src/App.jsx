@@ -1,25 +1,49 @@
-import { useState } from 'react'
-import logo from './logo.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
-
+import Footer from './Footer'
+import { Carousel } from 'react-responsive-carousel'
 function App() {
-  const [count, setCount] = useState(0)
+  const [notificacao, setNotificacao] = useState([])
+  var inicio = 0;
 
+  if (notificacao.length == 0 && inicio == 0) {
+    inicio = 1;
+    getNotificacao();
+  }
+
+  useEffect(() => { setInterval(setInterval(getNotificacao, 180000))}, [])
+
+  function getNotificacao() {
+    fetch('http://200.229.156.16:3001/db')
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        setNotificacao(data);
+      });
+  }
+
+  console.log(notificacao.descricao_abertura)
+  
   return (
-    <div className="App">
-       <header>Notificação de parada</header>
-    <nav><script src="App.js"></script></nav>
+<div>
+    {notificacao.map(notificacao => (
+      <div  key={notificacao.id_atendimento} className="notify">{notificacao.descricao_abertura}
+      </div>
+          ))}  
+    <div className='Fila'>
 
-    <main class="Indicadores">
-        <item class="Indi">TMA</item>
-        <item class="Indi">TME</item>
-        <item class="Indi">TMO</item>
-        <item class="Indi">RECEBIDAS</item>
-        <item class="Indi">ATENDIDAS</item>
-        <item class="Indi">REJEITAS</item>
-    </main>
-        <footer>Fila Whatsapp</footer>
     </div>
+    <div className='Indicadores'>
+        <div className='Indi'>TMA</div>
+        <div className='Indi'>TME</div>
+        <div className='Indi'>TMO</div>
+        <div className='Indi'>RECEBIDAS</div>
+        <div className='Indi'>ATENDIDAS</div>
+        <div className='Indi'>REJEITAS</div>
+    </div>
+        <Footer/>
+</div>
   )
 }
 

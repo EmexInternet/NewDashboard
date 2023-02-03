@@ -1,0 +1,10 @@
+<div style={{justifyContent:'center',background: 'white', borderRadius: width*0.015625, marginTop: height*0.09, marginLeft: height*0.04}}>
+      <h1 style={{font: 'Montserrat',color: "#60993E",fontSize: width*0.022, margin:0, display:'flex', justifyContent:'center' }}>Fila Whatsapp:{}</h1>
+        <ul  style= {{padding: 0, listStyle:"none", margin:0, display: 'inline-flex'}}>
+            <li className='Lizap' style= {{backgroundColor: '#283044', borderRadius: 30, margin: 10, listStyle:'none' , padding:10, 
+    width: 315, height: 153, alignItems:'flex', display: 'flex', flexDirection:'column',textAlign:'center'}}>
+    <div style={{margin: 0 ,fontSize: width*0.01, color: '#EBF5EE',justifyContent:'center'}}>Pedro Garcia</div>
+    <h4 style={{margin: 0 ,font: 'Montserrat',fontSize: width*0.015, color: '#EBF5EE', paddingBottom: height*0.001}}>Suporte</h4>
+    <h4 style={{margin: 0,font: 'Open Sans',fontSize: width*0.02, color: 'white' }}>10:00</h4></li>
+        </ul>
+    </div>

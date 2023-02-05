@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import api from './Api'
+import './App.css'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 
@@ -155,7 +156,7 @@ function Ura() {
 
   return (
 
-<body style={{height: height, width:width, fontSize: height*0.052, margin: 0 }}>
+<body className='body-color-ura' style={{height: height, width:width, fontSize: height*0.052, margin: 0 }}>
 
   <div style={{display: 'flex', flexWrap:'wrap', flexDirection: 'column'}}>
 
@@ -174,14 +175,13 @@ function Ura() {
     </ul>
   </div>
 
-    <div style={{font: 'Open Sans',width: width*0.76, height: height*0.20, marginTop: height*0.02, marginLeft: height*0.04, display: 'flex', borderRadius: 8}}>
+    <div className='notify' style={{font: 'Open Sans',width: width*0.76, height: height*0.20, marginTop: height*0.02, marginLeft: height*0.04, display: 'flex', borderRadius: 8}}>
       {notificacao.length > 0 ? (
         <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} showIndicators={false} interval={15000} showStatus={false} showArrows={false} width={width*0.76}>
           {notificacao.map(notificacao => (
             <text key={notificacao.id_atendimento}>{notificacao.descricao_abertura}</text>
             ))}
-        </Carousel>) : <text style={{fontsSize: height*0.24}}>Nenhuma notificação</text>}
-
+         </Carousel>) : <text style={{fontsSize: height*0.24}}>Nenhuma notificação</text>}
     </div>
 
     <div className='Indicadores' style={{width: width*0.7609375, height: height*0.409259259, paddingTop: height*0.037037037}}>
@@ -205,7 +205,7 @@ function Ura() {
       </Carousel>
     </div>
 
-    <div className='Avalia' style={{width:width*0.759, height:width*0.125, marginLeft:width*0.024, marginTop:width*0.03 }}>
+    {/* <div className='Avalia' style={{width:width*0.759, height:width*0.125, marginLeft:width*0.024, marginTop:width*0.03 }}>
         <div className='AvaliaTitulo'>Melhores avaliações URA</div>
         <div className='Avaliacoes' style={{width:width*0.759, height:height*0.172, display:'flex', flexDirection: 'row', alignItems:'center', justifyContent: 'space-around', }}>
           <div>
@@ -223,7 +223,7 @@ function Ura() {
             <div>5,5</div>
           </div>
         </div>
-    </div>
+    </div> */}
 
   </div>
   

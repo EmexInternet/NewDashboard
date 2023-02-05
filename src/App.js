@@ -6,7 +6,7 @@ import Sz from './Components/Sz/Sz';
 
 function App() {
   return (
-    <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} interval={30000} showIndicators={false} showArrows={false} width={'100vw'} showStatus={false} transitionTime={500}>
+    <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} interval={5000} showIndicators={false} showArrows={false} width={'100vw'} showStatus={false} transitionTime={500}>
       <Carousel.Item>
         <Ura></Ura>
       </Carousel.Item>

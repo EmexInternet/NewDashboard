@@ -3,26 +3,47 @@ import Carousel from 'react-bootstrap/Carousel';
 import Button from 'react-bootstrap/Button';
 import Ura from './Components/Ura/Ura'
 import Sz from './Components/Sz/Sz';
+import React, { useState, useEffect } from "react";
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
+}
 
 function App() {
+
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+  useEffect(() => {
+
+    let timeoutId;
+
+    function handleResize() {
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => {
+        setWindowDimensions(getWindowDimensions());
+      }, 1500);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+
+  }, []);  
+  
   return (
-    <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} interval={5000} showIndicators={false} showArrows={false} width={'100vw'} showStatus={false} transitionTime={500}>
+    <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} interval={11115000} showIndicators={false} showArrows={false} width={'100vw'} showStatus={false} transitionTime={500}>
       <Carousel.Item>
-        <Ura></Ura>
+        <Ura height={windowDimensions.height} width={windowDimensions.width}/>
       </Carousel.Item>
       <Carousel.Item>
-       <Sz></Sz>
+       <Sz height={windowDimensions.height} width={windowDimensions.width}/>
       </Carousel.Item>
     </Carousel>
   );
 }
 
 export default App;
-
-
-
-{/* 
-<Carousel.Caption>
-  <h3>Second slide label</h3>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-</Carousel.Caption> */}

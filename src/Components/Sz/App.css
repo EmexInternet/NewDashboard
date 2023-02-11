@@ -96,4 +96,14 @@
     font-weight: 400;
     font-size: 60px;
   }
-  
+
+  .body-sz .atendentes .lista{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .body-sz .atendentes .lista .agente{
+    color: white;
+  }
+ 

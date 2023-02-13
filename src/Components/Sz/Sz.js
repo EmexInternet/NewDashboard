@@ -20,8 +20,8 @@ function Sz(props) {
     const handleLogin = API
       .post('/auth/login', data)
       .then(response=>{
-        const token = eval(response.data.token);
-        const refreshToken = eval(response.data.refreshToken);
+        const token = response.data.token;
+        const refreshToken = response.data.refreshToken;
 
       localStorage.setItem("accessToken", token);
       localStorage.setItem("refreshToken", refreshToken);

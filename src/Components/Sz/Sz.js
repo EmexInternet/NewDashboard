@@ -4,12 +4,34 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from 'react-responsive-carousel';
 import { faWhatsapp, faFacebookMessenger, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import API from './API';
 
 // import { library } from '@fortawesome/fontawesome-svg-core';
 // import {  } from '@fortawesome/free-solid-svg-icons';
 // library.add(faWhatsapp);
 
 function Sz(props) {
+
+  const data = {
+    email: 'teste@emexinternet.com.br',
+    Password: '3m3x@internet',
+  };
+ 
+    const handleLogin = API
+      .post('/auth/login', data)
+      .then(response=>{
+        const token = response.data.token;
+        const refreshToken = response.data.refreshToken;
+
+      localStorage.setItem("accessToken", token);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      const user = response.data.user
+        //handle user
+        .catch(e=>console.log(e))
+    });
+    
+  console.log(handleLogin)
 
   return (
 
@@ -73,16 +95,6 @@ function Sz(props) {
         <div style={{display: 'flex', flexWrap: 'wrap', gap: props.width*0.028125, justifyContent: 'center', marginTop: `${props.height*0.128125}px`,  marginLeft: `${props.height*0.046}px`}}>
             <div className='atendentes' style={{borderRadius: 8, fontSize:props.height*0.06,width: '75.1vw', height: props.height*0.431, gap: props.height*0.028}}>
               <div style={{display: 'flex', justifyContent: 'center'}} >Atendentes</div>
-              <ul className='lista' style={{fontSize:props.height*0.028, gap: props.width*0.02, marginTop: props.height*0.02}}>
-
-              {[0,0,0,0,0,0,0,0].map(qtd =>(
-                <li className='agente' style= {{backgroundColor: '#253865', borderRadius: 8, listStyle:'none', 
-                  width: props.width*0.165, height: props.height*0.13, alignItems:'center', paddingTop: props.width*0.008, lineHeight:props.height*0.0001}} key={1} >
-                    <div style={{textAlign: 'center', padding: '10px 0px'}}>Leonardo Ferreira</div>
-                    <div style={{textAlign: 'center', padding: '10px 0px', marginTop: props.height*0.02}}> 20 clientes</div>
-                </li>
-              ))}
-             </ul>
             </div>
         </div>
 

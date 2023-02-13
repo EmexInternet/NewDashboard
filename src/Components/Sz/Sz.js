@@ -13,9 +13,9 @@ import API from './API';
 function Sz(props) {
 
   const data = {
-    email: 'teste@emexinternet.com.br',
-    Password: '3m3x@internet',
-  };
+    "email": "teste@emexinternet.com.br",
+    "password": "3m3x@internet"
+};
  
     const handleLogin = API
       .post('/auth/login', data)
@@ -30,7 +30,7 @@ function Sz(props) {
         //handle user
         .catch(e=>console.log(e))
     });
-    
+
   console.log(handleLogin)
 
   return (

@@ -13,15 +13,15 @@ import API from './API';
 function Sz(props) {
 
   const data = {
-    email: 'teste@emexinternet.com.br',
-    Password: '3m3x@internet',
-  };
+    "email": "teste@emexinternet.com.br",
+    "password": "3m3x@internet"
+};
  
     const handleLogin = API
       .post('/auth/login', data)
       .then(response=>{
-        const token = response.data.token;
-        const refreshToken = response.data.refreshToken;
+        const token = eval(response.data.token);
+        const refreshToken = eval(response.data.refreshToken);
 
       localStorage.setItem("accessToken", token);
       localStorage.setItem("refreshToken", refreshToken);
@@ -30,7 +30,7 @@ function Sz(props) {
         //handle user
         .catch(e=>console.log(e))
     });
-    
+
   console.log(handleLogin)
 
   return (

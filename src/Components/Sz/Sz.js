@@ -4,13 +4,53 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from 'react-responsive-carousel';
 import { faWhatsapp, faFacebookMessenger, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import API from './Api';
 
 // import { library } from '@fortawesome/fontawesome-svg-core';
 // import {  } from '@fortawesome/free-solid-svg-icons';
 // library.add(faWhatsapp);
 
 function Sz(props) {
+  const [token ,setToken] = useState([]);
 
+
+function executeHandleLogin() {
+  const data = {
+    "email": "teste@emexinternet.com.br",
+    "password": "3m3x@internet"
+  };
+  /* const handleLogin =*/ API.post('/auth/login', data)
+      .then(response=>{
+      setToken(response.data.token);
+
+      // localStorage.setItem("accessToken", token);
+
+      const user = response.data.user
+        //handle user
+        .catch(e=>console.log(e))
+    });
+}
+
+setInterval(executeHandleLogin, 60*60*1000)
+
+
+  const handleGetAttendances = (wait) => {
+  API.get(`/attendances/phase/${wait}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+
+handleGetAttendances('wait');
+
+console.log(handleGetAttendances)
   return (
 
   <body className='body-sz' style={{height: props.height, width:props.width, fontSize: props.height*0.052, margin: 0 }}>
@@ -50,7 +90,7 @@ function Sz(props) {
 
 
         <div className='Indicadores' style={{width: props.width*0.7609375, height: props.height*0.409259259, paddingTop: props.height*0.037037037}}>
-          <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} interval={15000} showIndicators={false} showArrows={false} width={props.width*0.80} showStatus={false} transitionTime={500}>
+          <Carousel >
             <div className='Dash1' style={{display: 'flex', flexWrap: 'wrap', gap: props.width*0.028125, alignItems: 'center', textAlign: 'center', justifyContent: 'center'}}>
               <div className='Indi' style={{borderRadius: 8, fontSize:props.height*0.06,width:props.width*0.232, height:props.height*0.19, gap: props.height*0.028}}>TMA <div className='Values' style={{FontSize: props.width*0.07}}>{1}</div>  </div>
               <div className='Indi' style={{borderRadius: 8, fontSize:props.height*0.06,width:props.width*0.232, height:props.height*0.19, gap: props.height*0.028}}>TME <div className='Values' style={{FontSize: props.width*0.07}}>{1}</div> </div>

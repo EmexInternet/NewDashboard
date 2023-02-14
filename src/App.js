@@ -35,7 +35,7 @@ function App() {
   }, []);  
   
   return (
-    <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} interval={11115000} showIndicators={false} showArrows={false} width={'100vw'} showStatus={false} transitionTime={500}>
+    <Carousel interval={11115000} width={'100vw'} transitiontime={500}>
       <Carousel.Item>
         <Ura height={windowDimensions.height} width={windowDimensions.width}/>
       </Carousel.Item>

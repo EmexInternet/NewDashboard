@@ -5,7 +5,7 @@ import { Carousel } from 'react-responsive-carousel';
 import { faWhatsapp, faFacebookMessenger, faInstagram, faAmilia } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import API from './Api';
-import fila from '../../fila.json'
+//import fila from '../../fila.json'
 
 // import { library } from '@fortawesome/fontawesome-svg-core';
 // import {  } from '@fortawesome/free-solid-svg-icons';
@@ -13,50 +13,77 @@ import fila from '../../fila.json'
 
 
 function Sz(props) {
-  // const [token ,setToken] = useState([]);
-  const [clientesFila, setFila] = useState(fila)
+  function fmtMSS(s) { return (s - (s %= 60)) + (9 < s ? ':' : ':0') + parseInt(s); }
+  const [token ,setToken] = useState([]);
+  const [clientesFila, setFila] = useState([]);
   const filal = clientesFila
-
-  // setFila(fila.slice(0,5))
-
-
-  // function executeHandleLogin() {
-  //   const data = {
-  //     "email": "teste@emexinternet.com.br",
-  //     "password": "3m3x@internet"
-  //   };
-  //   /* const handleLogin =*/ API.post('/auth/login', data)
-  //       .then(response=>{
-  //       setToken(response.data.token);
-
-  //       // localStorage.setItem("accessToken", token);
-
-  //       const user = response.data.user
-  //         //handle user
-  //         .catch(e=>console.log(e))
-  //     });
-  // }
-
-// setInterval(executeHandleLogin, 60*60*1000)
+ 
 
 
-//   const handleGetAttendances = (wait) => {
-//   API.get(`/attendances/phase/${wait}`, {
-//     headers: {
-//       'Authorization': `Bearer ${token}`
-//     }
-//   })
-//     .then(response => {
-//       console.log(response.data);
-//     })
-//     .catch(error => {
-//       console.error(error);
-//     });
-//   }
+  function executeHandleLogin() {
+    const data = {
+      "email": "teste@emexinternet.com.br",
+      "password": "3m3x@internet"
+    };
+    /* const handleLogin =*/ API.post('/auth/login', data)
+        .then(response=>{
+        setToken(response.data.token);
+        console.log('Pedi o Token, e encontrei')
+        // localStorage.setItem("accessToken", token);
 
-// handleGetAttendances('wait');
+        const user = response.data.user
+          //handle user
+          .catch(e=>console.log(e))
+      });
+  }
 
-// console.log(handleGetAttendances)
+setInterval(executeHandleLogin, 50000,[])
+
+
+  const fetchMyAPI_Fila = (wait) => {
+  API.get(`/attendances/phase/${wait}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      setFila(response.data);
+      console.log('Pedi a fila, e encontrei')
+    })
+    .catch(error => {
+      console.log('Pedi a fila, e não encontrei')
+      console.error(error);
+    });
+  }
+
+useEffect(() => { setInterval(fetchMyAPI_Fila('wait'), 5000) }, [])
+
+const handleTemp = (event)=>{
+  let lastWaitStart = null;
+
+  for (let i = event.length - 1; i >= 0; i--) {
+    const evento = event[i];
+    if (evento.event === "waitStart") {
+      lastWaitStart = evento;
+      console.log(lastWaitStart)
+
+      const now = new Date();
+      const createdAt = new Date(lastWaitStart.created_at);
+
+      const diffInMilliseconds = now - createdAt;
+
+      // Para obter o tempo em minutos, dividimos por 1000 para transformar em segundos e em seguida por 60 para transformar em minutos
+      const diffInMinutes = Math.round(diffInMilliseconds / 1000 / 60);
+
+      console.log(`A diferença entre as datas é de ${diffInMinutes} minutos.`);
+
+      return fmtMSS(diffInMinutes)
+    }
+  }
+}
+
+
+
   return (
 
   <body className='body-sz' style={{height: props.height, width:props.width, fontSize: props.height*0.052, margin: 0 }}>
@@ -74,9 +101,9 @@ function Sz(props) {
                 width: props.width*0.165, height: props.height*0.13, alignItems:'center', paddingTop: props.width*0.008, lineHeight:props.height*0.0001}} key={filal.protocol} className='row'>
                   <div style={{ fontSize: props.width*0.01, color: '#EBF5EE' }}>{`${filal.platform_id}`}<span style={{marginLeft: '12px'}}><FontAwesomeIcon style={{fontSize: '1.2em'}} icon={faWhatsapp} /></span></div>
                   <h4 style={{font: 'Montserrat',fontSize: props.width*0.015, color: '#EBF5EE' }}>
-                    {filal.campaign_id == '6047f56db4f2bb003126438d' ?  'Atendimento': (filal.campaign_id == '6047f56db4f2bb003126438f ' ?  'Comercial': (filal.campaign_id == '6047f56db4f2bb003126438e ' ?  'Suporte': filal.campaign_id == '6245dfaf0a995e2216156bfc ' ?  'Suporte Avançado': 'null'))}
+                    {filal.campaign_id == '6047f56db4f2bb003126438d' ?  'Atendimento': (filal.campaign_id == '6047f56db4f2bb003126438f' ?  'Comercial': (filal.campaign_id == '6047f56db4f2bb003126438e' ?  'Suporte': filal.campaign_id == '6245dfaf0a995e2216156bfc' ?  'Suporte Avançado': 'null'))}
                     </h4>
-                  <h4 style={{font: 'Open Sans',fontSize: props.width*0.02, color: 'white' }}>{'1:01'}</h4>
+                  <h4 style={{font: 'Open Sans',fontSize: props.width*0.02, color: 'white' }}>{handleTemp(filal.events)}</h4>
               </li>
             ))}
         </ul>
@@ -84,7 +111,7 @@ function Sz(props) {
 
 
         <div className='Indicadores' style={{width: props.width*0.7609375, height: props.height*0.409259259, paddingTop: props.height*0.037037037}}>
-          <Carousel >
+          <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} interval={15000} showIndicators={false} showArrows={false} width={props.width*0.80} showStatus={false} transitionTime={500}>
             <div className='Dash1' style={{display: 'flex', flexWrap: 'wrap', gap: props.width*0.028125, alignItems: 'center', textAlign: 'center', justifyContent: 'center'}}>
               <div className='Indi' style={{borderRadius: 8, fontSize:props.height*0.06,width:props.width*0.232, height:props.height*0.19, gap: props.height*0.028}}>TMA <div className='Values' style={{FontSize: props.width*0.07}}>{1}</div>  </div>
               <div className='Indi' style={{borderRadius: 8, fontSize:props.height*0.06,width:props.width*0.232, height:props.height*0.19, gap: props.height*0.028}}>TME <div className='Values' style={{FontSize: props.width*0.07}}>{1}</div> </div>

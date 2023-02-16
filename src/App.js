@@ -36,9 +36,9 @@ function App() {
   
   return (
     <Carousel interval={11115000} width={'100vw'} transitiontime={500}>
-      <Carousel.Item>
+      {/* <Carousel.Item>
         <Ura height={windowDimensions.height} width={windowDimensions.width}/>
-      </Carousel.Item>
+      </Carousel.Item> */}
       <Carousel.Item>
        <Sz height={windowDimensions.height} width={windowDimensions.width}/>
       </Carousel.Item>

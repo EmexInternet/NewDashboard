@@ -4,8 +4,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from 'react-responsive-carousel';
 import { faWhatsapp, faFacebookMessenger, faInstagram, faAmilia } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import API from './Api';
-//import fila from '../../fila.json'
+// import API from './Api';
+import fila from '../../fila.json'
 
 // import { library } from '@fortawesome/fontawesome-svg-core';
 // import {  } from '@fortawesome/free-solid-svg-icons';
@@ -15,48 +15,48 @@ import API from './Api';
 function Sz(props) {
   function fmtMSS(s) { return (s - (s %= 60)) + (9 < s ? ':' : ':0') + parseInt(s); }
   const [token ,setToken] = useState([]);
-  const [clientesFila, setFila] = useState([]);
-  const filal = clientesFila
+  // const [clientesFila, setFila] = useState([]);
+  const filal = fila
  
 
 
-  function executeHandleLogin() {
-    const data = {
-      "email": "teste@emexinternet.com.br",
-      "password": "3m3x@internet"
-    };
-    /* const handleLogin =*/ API.post('/auth/login', data)
-        .then(response=>{
-        setToken(response.data.token);
-        console.log('Pedi o Token, e encontrei')
-        // localStorage.setItem("accessToken", token);
+//   function executeHandleLogin() {
+//     const data = {
+//       "email": "teste@emexinternet.com.br",
+//       "password": "3m3x@internet"
+//     };
+//     /* const handleLogin =*/ API.post('/auth/login', data)
+//         .then(response=>{
+//         setToken(response.data.token);
+//         console.log('Pedi o Token, e encontrei')
+//         // localStorage.setItem("accessToken", token);
 
-        const user = response.data.user
-          //handle user
-          .catch(e=>console.log(e))
-      });
-  }
+//         const user = response.data.user
+//           //handle user
+//           .catch(e=>console.log(e))
+//       });
+//   }
 
-setInterval(executeHandleLogin, 50000,[])
+// setInterval(executeHandleLogin, 50000,[])
 
 
-  const fetchMyAPI_Fila = (wait) => {
-  API.get(`/attendances/phase/${wait}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  })
-    .then(response => {
-      setFila(response.data);
-      console.log('Pedi a fila, e encontrei')
-    })
-    .catch(error => {
-      console.log('Pedi a fila, e não encontrei')
-      console.error(error);
-    });
-  }
+//   const fetchMyAPI_Fila = (wait) => {
+//   API.get(`/attendances/phase/${wait}`, {
+//     headers: {
+//       'Authorization': `Bearer ${token}`
+//     }
+//   })
+//     .then(response => {
+//       setFila(response.data);
+//       console.log('Pedi a fila, e encontrei')
+//     })
+//     .catch(error => {
+//       console.log('Pedi a fila, e não encontrei')
+//       console.error(error);
+//     });
+//   }
 
-useEffect(() => { setInterval(fetchMyAPI_Fila('wait'), 5000) }, [])
+// useEffect(() => { setInterval(fetchMyAPI_Fila('wait'), 5000) }, [])
 
 const handleTemp = (event)=>{
   let lastWaitStart = null;
@@ -82,7 +82,29 @@ const handleTemp = (event)=>{
   }
 }
 
+const handleIcon = (platform) => {
+  if(platform  === 'Whatsapp' || platform  === 'WhatsappBusiness'){
+    return <FontAwesomeIcon style={{fontSize: '1.2em'}} icon={faWhatsapp} />
+  }else if(platform === 'InstagramDirect'){
+    return <FontAwesomeIcon style={{fontSize: '1.2em'}} icon={faInstagram} />
+  }else if(platform === 'Messenger'){
+    return <FontAwesomeIcon style={{fontSize: '1.2em'}} icon={faFacebookMessenger} />
+  }else{
+    return <FontAwesomeIcon style={{fontSize: '1.2em'}} icon={faAmilia} />
+  }
+}
 
+const handleName = (platform, number, name) => {
+  
+  if(platform  === 'Whatsapp' || platform  === 'WhatsappBusiness'){
+    return number
+  }else if(platform === 'InstagramDirect' || platform === 'Messenger'){
+    return name.slice(0,10).trim() //cortando a string nome para 10 digitos no maximo e retirando os espaçamentos no começo e final da string
+  }else{
+    return 'Desconhecido'
+  }
+
+}
 
   return (
 
@@ -91,7 +113,7 @@ const handleTemp = (event)=>{
     <div style={{display: 'flex', flexWrap:'wrap', flexDirection: 'column'}}>
 
       <div className='Fila' style={{width:props.width*0.1828125,height:props.height*0.95, fontSize: props.height*0.03, margin: props.height*0.007291667, marginLeft: props.height*0.02, marginTop: props.height*0.02}}>
-        <h1 style={{fontSize: props.height*0.05, fontfamily: 'Montserrat', fontWeight:400}}>Fila SZ: {clientesFila.length}</h1>
+        <h1 style={{fontSize: props.height*0.05, fontfamily: 'Montserrat', fontWeight:400}}>Fila SZ: {filal.length}</h1>
 
         <ul style= {{padding: props.height*0.009259259, margin: 0}}>
 
@@ -99,9 +121,9 @@ const handleTemp = (event)=>{
             {filal.map(filal => (
               <li style= {{backgroundColor: '#253865', borderRadius: 8, margin: props.height*0.009259259, listStyle:'none', 
                 width: props.width*0.165, height: props.height*0.13, alignItems:'center', paddingTop: props.width*0.008, lineHeight:props.height*0.0001}} key={filal.protocol} className='row'>
-                  <div style={{ fontSize: props.width*0.01, color: '#EBF5EE' }}>{`${filal.platform_id}`}<span style={{marginLeft: '12px'}}><FontAwesomeIcon style={{fontSize: '1.2em'}} icon={faWhatsapp} /></span></div>
+                  <div style={{ fontSize: props.width*0.01, color: '#EBF5EE' }}>{`${handleName(filal.platform, filal.platform_id, filal.name)}`}<span style={{marginLeft: '12px'}}>{handleIcon(filal.platform)}</span></div>
                   <h4 style={{font: 'Montserrat',fontSize: props.width*0.015, color: '#EBF5EE' }}>
-                    {filal.campaign_id == '6047f56db4f2bb003126438d' ?  'Atendimento': (filal.campaign_id == '6047f56db4f2bb003126438f' ?  'Comercial': (filal.campaign_id == '6047f56db4f2bb003126438e' ?  'Suporte': filal.campaign_id == '6245dfaf0a995e2216156bfc' ?  'Suporte Avançado': 'null'))}
+                    {filal.campaign_id == '6047f56db4f2bb003126438d' ?  'Atendimento': (filal.campaign_id == '6047f56db4f2bb003126438f' ?  'Comercial': (filal.campaign_id == '6047f56db4f2bb003126438e' ?  'Suporte': filal.campaign_id == '6245dfaf0a995e2216156bfc' ?  'Suporte Avançado': 'Desconhecido'))}
                     </h4>
                   <h4 style={{font: 'Open Sans',fontSize: props.width*0.02, color: 'white' }}>{handleTemp(filal.events)}</h4>
               </li>

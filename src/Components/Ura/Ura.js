@@ -15,7 +15,7 @@ function Ura(props) {
   const [recebidas, setData_rescebidas] = useState([]);
   const [atendiadas, setData_atendidas] = useState([]);
   const [logados, setLogados] = useState([]);
-  const [avaliacao, setData_avaliacao] = useState([]);
+  const [melhorAgente, setMelhorAgente] = useState([]);
 
   var inicio = 0;
 
@@ -24,9 +24,9 @@ function Ura(props) {
     getNotificacao();
   }
   
-  //Busca as notificações novas no sitema a cada 3 minutos
+  // Busca as notificações novas no sitema a cada 3 minutos
   useEffect(() => { setInterval(setInterval(getNotificacao, 18000))}, [])
-  //Busca as notificações de parada. Retorna um array
+  // Busca as notificações de parada. Retorna um array
   function getNotificacao() {
     fetch('http://200.229.156.16:3001/db')
       .then(response => {
@@ -35,6 +35,7 @@ function Ura(props) {
       .then(data => {
         setNotificacao(data);
       });
+      
   }
 
   //Busca a fila de atendimento na API. Retorna um array de objetos.
@@ -42,6 +43,7 @@ function Ura(props) {
     var response = await api.get("../monitor/calls_in_queue");
     if (Array.isArray(response.data.result))
     {
+      console.log(response.data.result)
       setData(response.data.result)
     }
     else
@@ -60,21 +62,35 @@ function Ura(props) {
   //console.log(fmtMSS(fila.wait))>
   ////// A partir daqui busca os dados de chamada da URA
   //Busca os dados de chamada recebidas, retorna um valor inteiro
+
   const fetchMyAPI_rescebidas = async () => {
     var response = await api.get("../dashboard/supervisor");
-    setData_rescebidas(response.data.result.stats.stats_all.queues.Atendimento.counts.incoming.start_of_this.day);
+    const recebidasAtendimento = response.data.result.stats.stats_all.queues.Atendimento.counts.incoming.start_of_this.day
+    const recebidasSuporte = response.data.result.stats.stats_all.queues.Suporte.counts.incoming.start_of_this.day
+    // const recebidasSuporte
+    setData_rescebidas(recebidasAtendimento+recebidasSuporte);
   }
   useEffect(() => { setInterval(fetchMyAPI_rescebidas, 40000) }, [])
 
   const fetchMyAPI_atendidas = async () => {
     var response = await api.get("../dashboard/supervisor");
-    setData_atendidas(response.data.result.stats.stats_all.queues.Atendimento.counts.incoming_answer.start_of_this.day);
+
+    const atendidasAtendimento = response.data.result.stats.stats_all.queues.Atendimento.counts.incoming_answer.start_of_this.day
+    const atendidasSuporte = response.data.result.stats.stats_all.queues.Suporte.counts.incoming_answer.start_of_this.day
+
+    setData_atendidas(atendidasAtendimento+atendidasSuporte);
   }
   useEffect(() => { setInterval(fetchMyAPI_atendidas, 40000) }, [])
 
  const fetchMyAPI_abandonadas = async () => {
     var response = await api.get("../dashboard/supervisor");
-    setData_abandonadas(response.data.result.stats.stats_all.queues.Atendimento.counts.incoming_lost.start_of_this.day);
+
+
+    const abandonadasAtendimento = response.data.result.stats.stats_all.queues.Atendimento.counts.incoming_lost.start_of_this.day
+    const abandonadasSuporte = response.data.result.stats.stats_all.queues.Suporte.counts.incoming_lost.start_of_this.day
+
+
+    setData_abandonadas(abandonadasAtendimento+abandonadasSuporte);
   }
   useEffect(() => { setInterval(fetchMyAPI_abandonadas, 40000) }, [])
   ////// A partir daqui busca os indicadores de desempenho da URA
@@ -97,7 +113,11 @@ function Ura(props) {
   //Busca o nível de serviço na API. Retorna o nível de serviço em porcentagem
   const fetchMyAPI_nivel = async () => {
     var response = await api.get("../monitor/stats_summary");
-    setData_nivel(response.data.result.queues.Atendimento.service_levels.start_of_this.day);
+
+    const nivelAtendimento = response.data.result.queues.Atendimento.service_levels.start_of_this.day
+    const nivelSuporte = response.data.result.queues.Suporte.service_levels.start_of_this.day
+
+    setData_nivel(((parseFloat(nivelAtendimento)+parseFloat(nivelSuporte))).toFixed(2)/2);
   }
 
   useEffect(() => { setInterval(fetchMyAPI_nivel, 40000) }, [])
@@ -112,38 +132,102 @@ function Ura(props) {
     useEffect(() => { setInterval(fetchMyAPI_logados, 5000) }, [])
 
 
+    //Esta função serve para convertar os milissegundos do updated_at do agente e subtrair com a data atual e com isso retorna a diferença em mm:ss dos dois
+    function converterMilissegundos(milissegundos) {
+        const data = new Date(milissegundos);
+
+        const dataDiferenca = new Date(new Date() - data)
+        const minutosDiferenca = dataDiferenca.getMinutes();
+        const segundosDiferenca = dataDiferenca.getSeconds();
+
+      
+        const minutosFormatados = (minutosDiferenca < 10) ? ('0' + minutosDiferenca) : minutosDiferenca;
+        const segundosFormatados = (segundosDiferenca < 10) ? ('0' + segundosDiferenca) : segundosDiferenca;
+
+
+        const horaDiferenca = (dataDiferenca.getHours() - 21)
+
+        let tempo;
+
+        if(horaDiferenca >=1){
+          tempo =  '0'+ horaDiferenca + ':' + minutosFormatados + ':' + segundosFormatados;
+        }else{
+          tempo = minutosFormatados + ':' + segundosFormatados;
+        }
+        return tempo;
+    }
+
+    // ---------------------------------------------------------------------
+    
     const atendentes = logados.filter(
       function(value) {
-        return value.exten === "1000" && value.device_status === "registered"|| value.exten === "1001" && value.device_status === "registered"|| value.exten === "1003" && value.device_status === "registered"
+        return value.exten === "1000" && value.device_status === "registered"|| value.exten === "1001" && value.device_status === "registered"|| value.exten === "1002" && value.device_status === "registered" || value.exten === "1003" && value.device_status === "registered"
       || value.exten === "1004" && value.device_status === "registered"|| value.exten === "1005" && value.device_status === "registered" || value.exten === "1006" && value.device_status === "registered"
       || value.exten === "1007" && value.device_status === "registered"|| value.exten === "1008" && value.device_status === "registered" || value.exten === "1009" && value.device_status === "registered"
       || value.exten === "1020" && value.device_status === "registered"|| value.exten === "1021" && value.device_status === "registered" || value.exten === "1022" && value.device_status === "registered"
       || value.exten === "1023" && value.device_status === "registered" 
       }); 
 
-      const emLinha = atendentes.filter(
+    // Resgata os agentes que estão pausados e de resto os que estão disponiveis, ordenado de pausado, em ligação e disponivel
+    const agentes = atendentes
+    .filter(a => a.agent?.name !== undefined)
+    .sort(function(a, b) {
+      if (a.is_paused === b.is_paused) {
+        if (a.status === 'incall' && b.status !== 'incall') {
+          return -1;
+        } else if (b.status === 'incall' && a.status !== 'incall') {
+          return 1;
+        } else {
+          return a.updated_at - b.updated_at;
+        }
+      } else if (a.is_paused === true) {
+        return -1;
+      } else {
+        return 1;
+      }
+    })
+    .map((agente, index, array) => {
+      if (index === array.findIndex(a => a.is_paused === agente.is_paused && a.status === agente.status)) {
+        const agentesMesmoStatus = array.filter(a => a.is_paused === agente.is_paused && a.status === agente.status);
+        agentesMesmoStatus.sort((a, b) => a.updated_at - b.updated_at);
+        return agentesMesmoStatus;
+      }
+      return null;
+    })
+    .flat()
+    .filter(a => a !== null)
+    
+
+      const atendentesPausadosDisponiveis = agentes.slice(0, 5);
+
+      const emLinha = agentes.filter(
         function(value) {
           return value.status === "incall"
         });
 
-      const Ociosos = atendentes.filter(
+      const Ociosos = agentes.filter(
         function(value) {
           return value.status === "available" && value.is_paused == false
         }
       );
 
-      const Pausados = atendentes.filter(
+      const Pausados = agentes.filter(
         function(value) {
           return value.is_paused === true
         });   
+      
+      // console.log('---- inicio requisição ----')
+      // console.log(new Date)
+      // console.log(atendentesPausadosDisponiveis)
+      // console.log('---- fim requisição ----')
 
-      /*const fetchMyAPI_avaliacao = async ()=> {
-        var response = await api.get("../dashboard/supervisor");
-        setData_avaliacao(response.data.result.stats.stats_by_extens)
+      const fetchMyAPI_melhorAgente = async ()=> {
+        var response = await api.get("../dashboard/agents");
+        console.log(response.data.result.inquiry.best.agent.by_agent_rate.name)
+        setMelhorAgente(response.data.result.inquiry.best.agent.by_agent_rate?.name)
       }
-      useEffect(() => { setInterval(fetchMyAPI_avaliacao, 40000) }, [])
+      useEffect(() => { setInterval(fetchMyAPI_melhorAgente, 40000) }, [])
 
-      console.log(avaliacao)*/
 
   return (
 
@@ -151,54 +235,150 @@ function Ura(props) {
 
   <div style={{display: 'flex', flexWrap:'wrap', flexDirection: 'column'}}>
 
-  <div className='Fila' style={{width:props.width*0.1828125,height:props.height*0.95, fontSize: props.height*0.03, margin: props.height*0.007291667, marginLeft: props.height*0.02, marginTop: props.height*0.02}}>
-      <h1 style={{fontSize: props.height*0.05, fontfamily: 'Montserrat', color: "#60993E", fontWeight:400}}>Fila URA: {fila.length}</h1>
+  <div className='Fila' style={{width:props.width*0.1828125,height:props.height*0.96, fontSize: props.height*0.03, margin: props.height*0.007291667, marginLeft: props.height*0.02, marginTop: props.height*0.02}}>
+      <h1 style={{fontSize: props.height*0.05, color: "#F3F3F3", fontWeight:400, marginTop: props.height*0.05}}>Fila URA: {fila.length}</h1>
 
-    <ul style= {{padding: props.height*0.009259259, margin: 0}}>
-          {filal.map(filal => (
-      <li style= {{backgroundColor: '#283044', borderRadius: 8, margin: props.height*0.009259259, listStyle:'none', 
-      width: props.width*0.165, height: props.height*0.13, alignItems:'center', paddingTop: props.width*0.008, lineHeight:props.height*0.0001}} key={filal.linkdid} className='row'>
-          <div style={{ fontSize: props.width*0.01, color: '#EBF5EE' }}>{filal.src}</div>
-          <h4 style={{font: 'Montserrat',fontSize: props.width*0.015, color: '#EBF5EE' }}>{filal.queue}</h4>
-          <h4 style={{font: 'Open Sans',fontSize: props.width*0.02, color: 'white' }}>{fmtMSS(filal.wait)}</h4>
-      </li>
-    ))}
+    <ul style= {{padding: props.height*0.009259259, margin: 0, marginTop: props.height*0.020}}>
+          {filal.map(filal => ( 
+            <li style= {{backgroundColor: '#406381', borderRadius: props.height*0.025, margin: props.height*0.009259259, listStyle:'none', marginBottom: props.height*0.035, 
+            width: props.width*0.165, height: props.height*0.131, alignItems:'center', paddingTop: props.width*0.007, lineHeight:props.height*0.0001}} key={filal.linkdid} className='row'>
+                <h4 style={{font: 'Inter', fontSize: props.width*0.015, color: '#423D3E', borderRadius: props.height * 0.015, marginTop: props.height * -0.035, paddingTop: props.height*0.005, paddingBottom: props.height*0.005}}>{filal.queue.slice(0,15)}</h4>
+                <h4 style={{font: 'Inter', fontSize: props.width*0.012, fontWeight: 'bold', color: '#F5F5F5', marginBottom: props.height*0.008 }}>{filal.src}</h4>
+                <h4 style={{font: 'Inter', fontSize: props.width*0.019, color: '#423D3E', color: '#F5F5F5' }}>{fmtMSS(filal.wait)}</h4>
+            </li> 
+          ))} 
     </ul>
   </div>
 
-    <div className='notify' style={{font: 'Open Sans',width: props.width*0.76, height: props.height*0.20, marginTop: props.height*0.02, marginLeft: props.height*0.04, display: 'flex', borderRadius: 8}}>
+    <div className='notify' style={{width: props.width*0.76, height: props.height*0.20, marginTop: props.height*0.02, marginLeft: props.height*0.04, display: 'flex', borderRadius: props.height*0.025}}>
       {notificacao.length > 0 ? (
         <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} showIndicators={false} interval={15000} showStatus={false} showArrows={false} width={props.width*0.76}>
           {notificacao.map(notificacao => (
-            <text key={notificacao.id_atendimento}>{notificacao.descricao_abertura}</text>
+            <text style={{marginTop: props.height*0.02, display: "block", fontSize: props.height*0.045}} key={notificacao.id_atendimento}>{notificacao.descricao_abertura}</text>
             ))}
          </Carousel>) : <text style={{fontsSize: props.height*0.24}}>Nenhuma notificação</text>}
     </div>
 
-    <div className='Indicadores' style={{width: props.width*0.7609375, height: props.height*0.409259259, paddingTop: props.height*0.037037037}}>
+    <div className='Indicadores' style={{width: props.width*0.7609375, height: props.height*0.150}}>
       <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} interval={15000} showIndicators={false} showArrows={false} width={props.width*0.80} showStatus={false} transitionTime={500}>
-      <div className='Dash1' style={{display: 'flex', flexWrap: 'wrap', gap: props.width*0.028125, alignItems: 'center', textAlign: 'center', justifyContent: 'center'}}>
-        <div className='Indi' style={{borderRadius: 8, fontSize:props.height*0.06,width:props.width*0.232, height:props.height*0.19, gap: props.height*0.028}}>TMA <div className='Values' style={{FontSize: props.width*0.07}}>{fmtMSS(tmas)}</div>  </div>
-        <div className='Indi' style={{borderRadius: 8, fontSize:props.height*0.06,width:props.width*0.232, height:props.height*0.19, gap: props.height*0.028}}>TME <div className='Values' style={{FontSize: props.width*0.07}}>{fmtMSS(tmes)}</div> </div>
-        <div className='Indi' style={{borderRadius: 8, fontSize:props.height*0.06,width:props.width*0.232, height:props.height*0.19, gap: props.height*0.028}}>TMO <div className='Values' style={{FontSize: props.width*0.07}}>{fmtMSS(tmes+tmas)}</div> </div>
-        <div className='Indi' style={{borderRadius: 8, fontSize:props.height*0.06,width:props.width*0.232, height:props.height*0.19, gap: props.height*0.028}}>RECEBIDAS <div className='Values' style={{FontSize: props.width*0.07}}>{recebidas}</div></div>
-        <div className='Indi' style={{borderRadius: 8, fontSize:props.height*0.06,width:props.width*0.232, height:props.height*0.19, gap: props.height*0.028}}>ATENDIDAS <div className='Values' style={{FontSize: props.width*0.07}}>{atendiadas}</div></div>
-        <div className='Indi' style={{borderRadius: 8, fontSize:props.height*0.06,width:props.width*0.232, height:props.height*0.19, gap: props.height*0.028}}>PERDIDAS <div className='Values' style={{FontSize: props.width*0.07}}>{abandonadas}</div></div>
+      <div className='Dash1' style={{display: 'flex', gap: props.width*0.027, alignItems: 'center', textAlign: 'center', justifyContent: 'center', paddingTop: props.height*0.037037037}}>
+        
+          <div className='Indi' style={{ borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background: "#CF721B"}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#fff",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>TMA</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{fmtMSS(tmas)}</div>
+          </div>
+
+         <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background: "#588D3A"}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.035, height:props.height*0.046}}>TME</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{fmtMSS(tmes)}</div>
+          </div>
+
+           
+          <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background: "#719EC6"}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>TMO</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{fmtMSS(tmes+tmas)}</div>
+          </div>
+
+          <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>Melhor avaliação</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{melhorAgente ? melhorAgente.slice(0, 13) : ""}</div>
+          </div>
+
+          
       </div>
 
-      <div className='Dash2' style={{display: 'flex', flexWrap: 'wrap', gap: props.width*0.028125, alignItems: 'center', textAlign: 'center', justifyContent: 'center'}}>
-        <div className='Indi2' style={{borderRadius: 8, fontSize:props.height*0.06,width: props.width*0.362, height: props.height*0.185, gap: props.height*0.028}}>Nível de serviço <div className='Values' style={{FontSize: props.width*0.07}}>{nivel}</div> </div>
-        <div className='Indi2' style={{borderRadius: 8, fontSize:props.height*0.06 ,width: props.width*0.362, height: props.height*0.185, gap: props.height*0.028}}>Agentes Online <div  className='Values' style={{FontSize: props.width*0.07}}>{atendentes.length}</div></div>
-        <div className='Indi21' style={{borderRadius: 8, fontSize:props.height*0.06, width: props.width*0.232, height: props.height*0.187, gap: props.height*0.028}}>Em Linha <div  className='Values' style={{FontSize: props.width*0.07}}>{emLinha.length}</div></div>
-        <div className='Indi21' style={{borderRadius: 8, fontSize:props.height*0.06, width: props.width*0.232, height: props.height*0.187, gap: props.height*0.028}}>Disponíveis <div  className='Values' style={{FontSize: props.width*0.07}}>{Ociosos.length}</div></div>
-        <div className='Indi21' style={{borderRadius: 8, fontSize:props.height*0.06, width: props.width*0.232, height: props.height*0.187, gap: props.height*0.028}}>Pausados <div  className='Values' style={{FontSize: props.width*0.07}}> {Pausados.length}</div></div>
+      <div className='Dash2' style={{display: 'flex', flexWrap: 'wrap', gap: props.width*0.027, alignItems: 'center', textAlign: 'center', justifyContent: 'center', paddingTop: props.height*0.037037037}}>
+        <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background: "#CF721B"}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>Recebidas</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{recebidas}</div>
+          </div> 
+
+          <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background: "#588D3A"}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>Nível serviço</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{nivel}%</div>
+          </div> 
+
+          <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background: "#719EC6"}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>Agentes Online</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{agentes.length}</div>
+          </div> 
+
+          <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>Em Linha</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{emLinha.length}</div>
+          </div> 
+
+      </div>
+
+
+
+      <div className='Dash3' style={{display: 'flex', flexWrap: 'wrap', gap: props.width*0.027, alignItems: 'center', textAlign: 'center', justifyContent: 'center', paddingTop: props.height*0.037037037}}>
+
+          <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background: "#CF721B"}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>Disponíveis</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{Ociosos.length}</div>
+          </div> 
+
+          <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background: "#588D3A"}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>Pausados</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{Pausados.length}</div>
+          </div>
+
+          <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background:"#719EC6"}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>Atendidas</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{atendiadas}</div>
+          </div> 
+
+          <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015}}>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>Abandonadas</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{abandonadas}</div>
+          </div>  
+        
+
       </div>
       </Carousel>
     </div>
 
+    <div className='container-agentes' style={{width: props.width*0.76, height: props.height*0.56, marginTop: props.height*0.05, marginLeft: props.height*0.04, borderRadius: props.height*0.025, paddingTop: props.height*0.036}}>
+
+      {atendentesPausadosDisponiveis.map(atendente => { 
+
+        return(
+        
+        <div className='agente' style={{borderRadius: props.height*0.025, fontSize: props.height*0.03, height: props.height*0.08, marginBottom: props.height*0.02}} >
+            <div className='nome-ramal' style={{minWidth: props.width * 0.18}} >
+              <span style={{fontSize: props.height*0.027, textTransform: "uppercase"}} >{atendente.agent?.name}</span>
+              {/* <span style={{fontSize: props.height*0.019}} >{atendente.exten}</span> */}
+            </div>
+
+            {atendente.is_paused ? (
+              <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.023, height: props.height*0.05, minWidth: props.width*0.10, color: '#FFF', background: "#ec2121", marginRight: props.width*0.02, textTransform: "uppercase"}}>
+                Pausado
+              </div>
+            ) : (
+              atendente.status !== 'incall' ? (
+                <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.023, height: props.height*0.05, minWidth: props.width*0.10, color: '#FFF', background: "#588D3A", marginRight: props.width*0.02, textTransform: "uppercase"}}>
+                  Disponível
+                </div>
+              ) : (
+                <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.023, height: props.height*0.05, minWidth: props.width*0.10, color: '#FFF', background: "#CF721B", marginRight: props.width*0.02, textTransform: "uppercase"}}>
+                  Em ligação
+                </div>
+              )
+            )}
+
+            <div className='agente-tempo' style={{fontSize: props.height*0.034, minWidth: props.width * 0.10}}>
+              {converterMilissegundos(atendente.updated_at)}
+            </div>
+        </div>
+      )})}
+      
+
+    </div>
+    
     {/* <div className='Avalia' style={{width:width*0.759, height:width*0.125, marginLeft:width*0.024, marginTop:width*0.03 }}>
         <div className='AvaliaTitulo'>Melhores avaliações URA</div>
-        <div className='Avaliacoes' style={{width:width*0.759, height:props.height*0.172, display:'flex', flexDirection: 'row', alignItems:'center', justifyContent: 'space-around', }}>
+        <div className='Avaliacoes' style={{width:width*0.759, height:props.height*0.122, display:'flex', flexDirection: 'row', alignItems:'center', justifyContent: 'space-around', }}>
           <div>
             Dyego
             <div>5,5</div>

@@ -2,7 +2,7 @@ import './App.css';
 import Carousel from 'react-bootstrap/Carousel';
 import Button from 'react-bootstrap/Button';
 import Ura from './Components/Ura/Ura'
-import Sz from './Components/Sz/Sz';
+import Fluctus from './Components/Fluctus/Fluctus';
 import React, { useState, useEffect } from "react";
 
 function getWindowDimensions() {
@@ -35,14 +35,14 @@ function App() {
   }, []);  
   
   return (
-    <Carousel interval={11115000} width={'100vw'} transitiontime={500}>
-      {/* <Carousel.Item>
+    // <Carousel interval={11115000} width={'100vw'} transitiontime={500}>
+    //   <Carousel.Item>
         <Ura height={windowDimensions.height} width={windowDimensions.width}/>
-      </Carousel.Item> */}
-      <Carousel.Item>
-       <Sz height={windowDimensions.height} width={windowDimensions.width}/>
-      </Carousel.Item>
-    </Carousel>
+      // </Carousel.Item>
+      // <Carousel.Item>
+      //  <Fluctus height={windowDimensions.height} width={windowDimensions.width}/>
+      //</Carousel.Item>
+    // </Carousel>
   );
 }
 

@@ -98,7 +98,10 @@ function Ura(props) {
   //Busca o tempo médio de espera na API. Retorna uma média de valores
   const fetchMyAPI_tmes = async () => {
     var response = await api.get("../monitor/stats_summary");
-    setData_tmes(response.data.result.queues.Atendimento.avgs.wait_time.start_of_this.day.avg);
+    const tmeatendimento =  response.data.result.queues.Atendimento.avgs.wait_time.start_of_this.day.avg
+    const tmesuporte = response.data.result.queues.Suporte.avgs.wait_time.start_of_this.day.avg
+
+    setData_tmes((parseFloat(tmesuporte)+parseFloat(tmeatendimento)).toFixed(2)/2)
   }
   useEffect(() => { setInterval(fetchMyAPI_tmes, 40000) }, [])
  //console.log(tmes)
@@ -227,6 +230,8 @@ function Ura(props) {
         setMelhorAgente(response.data.result.inquiry.best.agent.by_agent_rate?.name)
       }
       useEffect(() => { setInterval(fetchMyAPI_melhorAgente, 40000) }, [])
+
+     
 
 
   return (

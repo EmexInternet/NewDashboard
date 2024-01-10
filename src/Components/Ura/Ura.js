@@ -168,7 +168,7 @@ function Ura(props) {
       || value.exten === "1004" && value.device_status === "registered"|| value.exten === "1005" && value.device_status === "registered" || value.exten === "1006" && value.device_status === "registered"
       || value.exten === "1007" && value.device_status === "registered"|| value.exten === "1008" && value.device_status === "registered" || value.exten === "1009" && value.device_status === "registered"
       || value.exten === "1020" && value.device_status === "registered"|| value.exten === "1021" && value.device_status === "registered" || value.exten === "1022" && value.device_status === "registered"
-      || value.exten === "1023" && value.device_status === "registered" 
+      || value.exten === "1023" && value.device_status === "registered"|| value.exten === "1066" && value.device_status === "registered" 
       }); 
 
     // Resgata os agentes que estão pausados e de resto os que estão disponiveis, ordenado de pausado, em ligação e disponivel

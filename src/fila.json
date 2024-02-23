@@ -1,0 +1,236 @@
+[
+    {
+        "_id": "63eb5b8e592f60140f5f829b",
+        "name": "KKKKKKKKKK",
+        "contact_id": "62c4b879b2141d58b53b0a90",
+        "channel_id": "624314c25bf39200110a11c4",
+        "platform": "Whatsapp",
+        "platform_id": "5524999919294",
+        "lastInteraction": "2023-02-14 10:02:05",
+        "position": 3,
+        "group": "18308bc1",
+        "status": "wait",
+        "protocol": "2023021400066",
+        "events": [
+            {
+                "event": "autoStartFlow",
+                "created_at": "2023-02-14 06:59:42.625146"
+            },
+            {
+                "event": "waitStart",
+                "created_at": "2023-02-14 07:01:19.328375"
+            },
+            {
+                "event": "humanStart",
+                "created_at": "2023-02-14 09:00:11.665246"
+            },
+            {
+                "event": "humanTransfer",
+                "created_at": "2023-02-14 09:00:20.396033"
+            },
+            {
+                "event": "waitStart",
+                "created_at": "2023-02-14 09:10:31.078853"
+            }
+        ],
+        "agents_conference": [],
+        "lastMessageDateContact": "2023-02-14 07:02:05.185960",
+        "created_at": "2023-02-14T09:59:42.000000Z",
+        "isAttendance": false,
+        "lastMessage": "O agente Emex Internet - Débora Quintino transferiu o atendimento para a equipe Atendimento",
+        "timerOnWait": "2023-02-14 09:20:32.462574",
+        "timer_on_wait_utc": "2023-02-14T12:20:32.000000Z",
+        "menuAttempts": 0,
+        "agent_id": null,
+        "campaign_id": "6047f56db4f2bb003126438d",
+        "wait": "00:00:00",
+        "campaignFinishMessage": null,
+        "continueFlow": true,
+        "timerAccept": "2023-02-14 09:00:11.492425",
+        "isTransfer": true,
+        "transferHistory": {
+            "type": "campaign",
+            "value": "Comercial"
+        },
+        "waitingByCodename": false,
+        "agentList": [],
+        "phase": "wait",
+        "created_at_utc": "2023-02-14T09:59:42.000000Z"
+    },
+
+    {
+        "_id": "63eb5b8e592f60140f5f829b",
+        "name": "MARGARETHE STANISCE MELLO",
+        "contact_id": "62c4b879b2141d58b53b0a90",
+        "channel_id": "624314c25bf39200110a11c4",
+        "platform": "InstagramDirect",
+        "platform_id": "5524999919294",
+        "lastInteraction": "2023-02-14 10:02:05",
+        "position": 3,
+        "group": "18308bc1",
+        "status": "wait",
+        "protocol": "2023021400066",
+        "events": [
+            {
+                "event": "autoStartFlow",
+                "created_at": "2023-02-14 06:59:42.625146"
+            },
+            {
+                "event": "waitStart",
+                "created_at": "2023-02-14 07:01:19.328375"
+            },
+            {
+                "event": "humanStart",
+                "created_at": "2023-02-14 09:00:11.665246"
+            },
+            {
+                "event": "humanTransfer",
+                "created_at": "2023-02-14 09:00:20.396033"
+            },
+            {
+                "event": "waitStart",
+                "created_at": "2023-02-14 09:10:31.078853"
+            }
+        ],
+        "agents_conference": [],
+        "lastMessageDateContact": "2023-02-14 07:02:05.185960",
+        "created_at": "2023-02-14T09:59:42.000000Z",
+        "isAttendance": false,
+        "lastMessage": "O agente Emex Internet - Débora Quintino transferiu o atendimento para a equipe Atendimento",
+        "timerOnWait": "2023-02-14 09:20:32.462574",
+        "timer_on_wait_utc": "2023-02-14T12:20:32.000000Z",
+        "menuAttempts": 0,
+        "agent_id": null,
+        "campaign_id": "6047f56db4f2bb003126438f",
+        "wait": "00:00:00",
+        "campaignFinishMessage": null,
+        "continueFlow": true,
+        "timerAccept": "2023-02-14 09:00:11.492425",
+        "isTransfer": true,
+        "transferHistory": {
+            "type": "campaign",
+            "value": "Comercial"
+        },
+        "waitingByCodename": false,
+        "agentList": [],
+        "phase": "wait",
+        "created_at_utc": "2023-02-14T09:59:42.000000Z"
+    },
+
+    {
+        "_id": "63eb5b8e592f60140f5f829b",
+        "name": "Dyego kk",
+        "contact_id": "62c4b879b2141d58b53b0a90",
+        "channel_id": "624314c25bf39200110a11c4",
+        "platform": "WhatsappBusiness",
+        "platform_id": "5524999919294",
+        "lastInteraction": "2023-02-14 10:02:05",
+        "position": 3,
+        "group": "18308bc1",
+        "status": "wait",
+        "protocol": "2023021400066",
+        "events": [
+            {
+                "event": "autoStartFlow",
+                "created_at": "2023-02-14 06:59:42.625146"
+            },
+            {
+                "event": "waitStart",
+                "created_at": "2023-02-14 07:01:19.328375"
+            },
+            {
+                "event": "humanStart",
+                "created_at": "2023-02-14 09:00:11.665246"
+            },
+            {
+                "event": "humanTransfer",
+                "created_at": "2023-02-14 09:00:20.396033"
+            },
+            {
+                "event": "waitStart",
+                "created_at": "2023-02-14 09:10:31.078853"
+            }
+        ],
+        "agents_conference": [],
+        "lastMessageDateContact": "2023-02-14 07:02:05.185960",
+        "created_at": "2023-02-14T09:59:42.000000Z",
+        "isAttendance": false,
+        "lastMessage": "O agente Emex Internet - Débora Quintino transferiu o atendimento para a equipe Atendimento",
+        "timerOnWait": "2023-02-14 09:20:32.462574",
+        "timer_on_wait_utc": "2023-02-14T12:20:32.000000Z",
+        "menuAttempts": 0,
+        "agent_id": null,
+        "campaign_id": "6047f56db4f2bb003126438e",
+        "wait": "00:00:00",
+        "campaignFinishMessage": null,
+        "continueFlow": true,
+        "timerAccept": "2023-02-14 09:00:11.492425",
+        "isTransfer": true,
+        "transferHistory": {
+            "type": "campaign",
+            "value": "Comercial"
+        },
+        "waitingByCodename": false,
+        "agentList": [],
+        "phase": "wait",
+        "created_at_utc": "2023-02-14T09:59:42.000000Z"
+    },
+    {
+        "_id": "63eb5b8e592f60140f5f829b",
+        "name": "LEONARDO",
+        "contact_id": "62c4b879b2141d58b53b0a90",
+        "channel_id": "624314c25bf39200110a11c4",
+        "platform": "Messenger",
+        "platform_id": "5524999919294",
+        "lastInteraction": "2023-02-14 10:02:05",
+        "position": 3,
+        "group": "18308bc1",
+        "status": "wait",
+        "protocol": "2023021400066",
+        "events": [
+            {
+                "event": "autoStartFlow",
+                "created_at": "2023-02-14 06:59:42.625146"
+            },
+            {
+                "event": "waitStart",
+                "created_at": "2023-02-14 07:01:19.328375"
+            },
+            {
+                "event": "humanStart",
+                "created_at": "2023-02-14 09:00:11.665246"
+            },
+            {
+                "event": "humanTransfer",
+                "created_at": "2023-02-14 09:00:20.396033"
+            },
+            {
+                "event": "waitStart",
+                "created_at": "2023-02-14 09:10:31.078853"
+            }
+        ],
+        "agents_conference": [],
+        "lastMessageDateContact": "2023-02-14 07:02:05.185960",
+        "created_at": "2023-02-14T09:59:42.000000Z",
+        "isAttendance": false,
+        "lastMessage": "O agente Emex Internet - Débora Quintino transferiu o atendimento para a equipe Atendimento",
+        "timerOnWait": "2023-02-14 09:20:32.462574",
+        "timer_on_wait_utc": "2023-02-14T12:20:32.000000Z",
+        "menuAttempts": 0,
+        "agent_id": null,
+        "campaign_id": "6245dfaf0a995e2216156bfc",
+        "wait": "00:00:00",
+        "campaignFinishMessage": null,
+        "continueFlow": true,
+        "timerAccept": "2023-02-14 09:00:11.492425",
+        "isTransfer": true,
+        "transferHistory": {
+            "type": "campaign",
+            "value": "Comercial"
+        },
+        "waitingByCodename": false,
+        "agentList": [],
+        "phase": "wait",
+        "created_at_utc": "2023-02-14T09:59:42.000000Z"
+    }
+]

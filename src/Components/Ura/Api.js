@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://200.229.156.14/login',
+    baseURL: 'https://emex.newave.one',
     headers: {'Content-Type': 'application/json; charset=utf-8',},
     auth: {
     username: process.env.REACT_APP_USERNAME,

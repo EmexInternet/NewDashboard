@@ -28,7 +28,7 @@ function Ura(props) {
   useEffect(() => { setInterval(setInterval(getNotificacao, 18000))}, [])
   // Busca as notificações de parada. Retorna um array
   function getNotificacao() {
-    fetch('http://200.229.156.16:3001/db')
+    fetch('https://emex.newave.one/db')
       .then(response => {
         return response.json();
       })

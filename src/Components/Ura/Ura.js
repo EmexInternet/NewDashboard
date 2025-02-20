@@ -28,7 +28,7 @@ function Ura(props) {
   useEffect(() => { setInterval(setInterval(getNotificacao, 18000))}, [])
   // Busca as notificações de parada. Retorna um array
   function getNotificacao() {
-    fetch('https://emex.newave.one/db')
+    fetch('http://200.229.156.16:3001/db')
       .then(response => {
         return response.json();
       })
@@ -168,7 +168,8 @@ function Ura(props) {
       || value.exten === "1004" && value.device_status === "registered"|| value.exten === "1005" && value.device_status === "registered" || value.exten === "1006" && value.device_status === "registered"
       || value.exten === "1007" && value.device_status === "registered"|| value.exten === "1008" && value.device_status === "registered" || value.exten === "1009" && value.device_status === "registered"
       || value.exten === "1020" && value.device_status === "registered"|| value.exten === "1021" && value.device_status === "registered" || value.exten === "1022" && value.device_status === "registered"
-      || value.exten === "1023" && value.device_status === "registered"|| value.exten === "1066" && value.device_status === "registered" 
+      || value.exten === "1023" && value.device_status === "registered"|| value.exten === "1066" && value.device_status === "registered" || value.exten === "3001" && value.device_status === "registered" 
+      || value.exten === "3011" && value.device_status === "registered" 
       }); 
 
     // Resgata os agentes que estão pausados e de resto os que estão disponiveis, ordenado de pausado, em ligação e disponivel

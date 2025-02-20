@@ -169,6 +169,9 @@ function Ura(props) {
       || value.exten === "1007" && value.device_status === "registered"|| value.exten === "1008" && value.device_status === "registered" || value.exten === "1009" && value.device_status === "registered"
       || value.exten === "1020" && value.device_status === "registered"|| value.exten === "1021" && value.device_status === "registered" || value.exten === "1022" && value.device_status === "registered"
       || value.exten === "1023" && value.device_status === "registered"|| value.exten === "1066" && value.device_status === "registered" || value.exten === "3001" && value.device_status === "registered" 
+      || value.exten === "3002" && value.device_status === "registered" || value.exten === "3003" && value.device_status === "registered" || value.exten === "3004" && value.device_status === "registered"
+      || value.exten === "3005" && value.device_status === "registered"  || value.exten === "3006" && value.device_status === "registered" || value.exten === "3007" && value.device_status === "registered" 
+      || value.exten === "3008" && value.device_status === "registered" || value.exten === "3009" && value.device_status === "registered" || value.exten === "3010" && value.device_status === "registered" 
       || value.exten === "3011" && value.device_status === "registered" 
       }); 
 

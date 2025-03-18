@@ -7,6 +7,7 @@ import { Carousel } from 'react-responsive-carousel';
 function Ura(props) {
   function fmtMSS(s) { return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + parseInt(s); }
   const [notificacao, setNotificacao] = useState([])
+  const [churn, setChurn] = useState([])
   const [fila, setData] = useState([]);
   const [tmes, setData_tmes] = useState([]);
   const [tmas, setData_tmas] = useState([]);
@@ -34,6 +35,20 @@ function Ura(props) {
       })
       .then(data => {
         setNotificacao(data);
+      });
+      
+  }
+
+   // Busca as notificações novas no sitema a cada 3 minutos
+  useEffect(() => { setInterval(setInterval(getChurn, 18000))}, [])
+  // Busca as notificações de parada. Retorna um array
+  function getChurn() {
+    fetch('http://200.229.156.16:3001/churn')
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        setChurn(data[0].churn);
       });
       
   }
@@ -259,14 +274,19 @@ function Ura(props) {
     </ul>
   </div>
 
-    <div className='notify' style={{width: props.width*0.76, height: props.height*0.20, marginTop: props.height*0.02, marginLeft: props.height*0.04, display: 'flex', borderRadius: props.height*0.025}}>
-      {notificacao.length > 0 ? (
-        <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} showIndicators={false} interval={15000} showStatus={false} showArrows={false} width={props.width*0.76}>
-          {notificacao.map(notificacao => (
-            <text style={{marginTop: props.height*0.02, display: "block", fontSize: props.height*0.045}} key={notificacao.id_atendimento}>{notificacao.descricao_abertura}</text>
-            ))}
-         </Carousel>) : <text style={{fontsSize: props.height*0.24}}>Nenhuma notificação</text>}
-    </div>
+{/* <div className='notify' style={{width: props.width*0.76, height: props.height*0.20, marginTop: props.height*0.02, marginLeft: props.height*0.04, display: 'flex', borderRadius: props.height*0.025}}>
+    {notificacao.length > 0 ? (
+      <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} showIndicators={false} interval={15000} showStatus={false} showArrows={false} width={props.width*0.76}>
+        {notificacao.map(notificacao => (
+          <text style={{marginTop: props.height*0.02, display: "block", fontSize: props.height*0.045}} key={notificacao.id_atendimento}>{notificacao.descricao_abertura}</text>
+          ))}
+        </Carousel>) : <text style={{fontsSize: props.height*0.24}}>Nenhuma notificação</text>}
+  </div> */}
+
+<div style={{width: props.width*0.76, height: props.height*0.20, marginTop: props.height*0.02, marginLeft: props.height*0.04, display: 'flex', borderRadius: props.height*0.025, justifyContent: 'center', alignItems: 'center'}}>
+
+  <img src="/Logoemex.png" alt="Logo"  style={{width: props.width * 0.25, height: 'auto', paddingBottom: props.height*0.01 }}/>
+  </div>
 
     <div className='Indicadores' style={{width: props.width*0.7609375, height: props.height*0.150}}>
       <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} interval={15000} showIndicators={false} showArrows={false} width={props.width*0.80} showStatus={false} transitionTime={500}>
@@ -284,8 +304,8 @@ function Ura(props) {
 
            
           <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background: "#719EC6"}}>
-            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>TMO</div>
-            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{fmtMSS(tmes+tmas)}</div>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>Churn</div>
+            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{churn}</div>
           </div>
 
           <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015}}>

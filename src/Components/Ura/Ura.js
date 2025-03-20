@@ -3,6 +3,7 @@ import api from './Api'
 import './App.css'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
+import GaugeComponent from "./GaugeComponent";
 
 function Ura(props) {
   function fmtMSS(s) { return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + parseInt(s); }
@@ -48,7 +49,7 @@ function Ura(props) {
         return response.json();
       })
       .then(data => {
-        setChurn(data[0].churn);
+        setChurn(data[0].teto_churn);
       });
       
   }
@@ -250,10 +251,8 @@ function Ura(props) {
       }
       useEffect(() => { setInterval(fetchMyAPI_melhorAgente, 40000) }, [])
 
-     
-
-
   return (
+<>
 
 <body className='body-color-ura' style={{height: props.height, width:props.width, fontSize: props.height*0.052, margin: 0 }}>
 
@@ -283,10 +282,23 @@ function Ura(props) {
         </Carousel>) : <text style={{fontsSize: props.height*0.24}}>Nenhuma notificação</text>}
   </div> */}
 
-<div style={{width: props.width*0.76, height: props.height*0.20, marginTop: props.height*0.02, marginLeft: props.height*0.04, display: 'flex', borderRadius: props.height*0.025, justifyContent: 'center', alignItems: 'center'}}>
+  
 
-  <img src="/Logoemex.png" alt="Logo"  style={{width: props.width * 0.25, height: 'auto', paddingBottom: props.height*0.01 }}/>
+<div style={{width: props.width*0.76, height: props.height*0.20, marginTop: props.height*0.02, marginLeft: props.height*0.04, display: 'flex', borderRadius: props.height*0.025, justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
+
+  {/* Logo centralizada */}
+  <img src="/Logoemex.png" alt="Logo" style={{position: 'absolute', left: '50%', transform: 'translateX(-50%)', width: props.width * 0.25, height: 'auto', paddingBottom: props.height*0.01 }}/>
+
+  
+
+  {/* Gauge alinhado à direita */}
+  <div style={{position: 'absolute', right: '-22px'}}>
+    <GaugeComponent width={props.width} height={props.height} min={0} mid={135} max={450} aftermax={600} value={300}/>
   </div>
+
+</div>
+
+
 
     <div className='Indicadores' style={{width: props.width*0.7609375, height: props.height*0.150}}>
       <Carousel showThumbs={false} autoPlay={true} infiniteLoop={true} interval={15000} showIndicators={false} showArrows={false} width={props.width*0.80} showStatus={false} transitionTime={500}>
@@ -298,14 +310,8 @@ function Ura(props) {
           </div>
 
          <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background: "#588D3A"}}>
-            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.035, height:props.height*0.046}}>TME</div>
+            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>TME</div>
             <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{fmtMSS(tmes)}</div>
-          </div>
-
-           
-          <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015, background: "#719EC6"}}>
-            <div style={{borderRadius: props.height * 0.015, color: "#2B373F", background: "#FFF",width:props.width*0.15, position: "absolute", top: props.height*-0.015, fontSize: props.height*0.029, height:props.height*0.046}}>Churn</div>
-            <div style={{fontSize: props.height*0.0420, marginTop: props.height*0.028 }} >{churn}</div>
           </div>
 
           <div className='Indi' style={{borderRadius: props.height*0.025,width:props.width*0.170, height:props.height*0.12, padding: props.height*0.015}}>
@@ -428,6 +434,7 @@ function Ura(props) {
   </div>
   
 </body>
+</>
   )
 }
 

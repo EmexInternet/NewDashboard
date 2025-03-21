@@ -9,6 +9,7 @@ function Ura(props) {
   function fmtMSS(s) { return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + parseInt(s); }
   const [notificacao, setNotificacao] = useState([])
   const [churn, setChurn] = useState([])
+  const [tetochurn, setTetoChurn] = useState([])
   const [fila, setData] = useState([]);
   const [tmes, setData_tmes] = useState([]);
   const [tmas, setData_tmas] = useState([]);
@@ -49,7 +50,8 @@ function Ura(props) {
         return response.json();
       })
       .then(data => {
-        setChurn(data[0].teto_churn);
+        setChurn(data[0].churn);
+        setTetoChurn(data[0].churn_relativo);
       });
       
   }
@@ -251,6 +253,7 @@ function Ura(props) {
       }
       useEffect(() => { setInterval(fetchMyAPI_melhorAgente, 40000) }, [])
 
+
   return (
 <>
 
@@ -289,11 +292,11 @@ function Ura(props) {
   {/* Logo centralizada */}
   <img src="/Logoemex.png" alt="Logo" style={{position: 'absolute', left: '50%', transform: 'translateX(-50%)', width: props.width * 0.25, height: 'auto', paddingBottom: props.height*0.01 }}/>
 
-  
+
 
   {/* Gauge alinhado à direita */}
-  <div style={{position: 'absolute', right: '-22px'}}>
-    <GaugeComponent width={props.width} height={props.height} min={0} mid={135} max={450} aftermax={600} value={300}/>
+  <div style={{position: 'absolute', right: '-15px'}}>
+    <GaugeComponent width={props.width} height={props.height} min={0} mid={(Math.round(parseFloat(tetochurn) * 0.5154 * 100) / 100).toFixed(2)} max={parseFloat(tetochurn)} aftermax={(Math.round(parseFloat(tetochurn) * 1.2371 * 100) / 100).toFixed(2)} value={parseFloat(churn)}/>
   </div>
 
 </div>

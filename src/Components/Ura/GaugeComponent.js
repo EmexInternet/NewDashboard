@@ -3,7 +3,7 @@ import GaugeComponent from "react-gauge-component";
 
 // Função para formatar o valor
 const valueFormat = (value) => {
-  return value;
+  return `${value} %`;
 };
 
 // Componente do Gauge
@@ -13,7 +13,7 @@ const GaugeChart = ({ width, height, min, mid, max, aftermax, value }) => {
       
       {/* Contêiner do Gauge */}
       <div style={{ width: `${width * 0.2}px`, height: `${height * 0.2}px`, 
-        marginTop: `-35px`,  }}>
+        marginTop: `-${height * 0.0003}px`,  }}>
         <GaugeComponent
           type="semicircle"
           arc={{
@@ -30,7 +30,7 @@ const GaugeChart = ({ width, height, min, mid, max, aftermax, value }) => {
           pointer={{type: "arrow", elastic: true}}
           labels={{
             valueLabel: {
-              style: { fontSize: '40px', fontWeight: "bold", transform: `translateY(${height * 0.000}px)`, fill: '#5A5A5A', strokeWidth: 0 },
+              style: { fontSize: '40px', fontWeight: "bold", transform: `translateY(${height * 0.00000}px)`, fill: '#5A5A5A', strokeWidth: 0 },
               formatTextValue: valueFormat,
             },
             tickLabels: {
@@ -58,7 +58,7 @@ const GaugeChart = ({ width, height, min, mid, max, aftermax, value }) => {
         fontSize: height * 0.02, 
         fontWeight: "bold", 
         color: "#5A5A5A", 
-        marginTop: `-35px`, 
+        marginTop: `-${height * 0.015}px`, 
         textAlign: "center"
       }}>
         Cancelamentos

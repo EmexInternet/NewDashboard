@@ -290,14 +290,16 @@ function Ura(props) {
 <div style={{width: props.width*0.76, height: props.height*0.20, marginTop: props.height*0.02, marginLeft: props.height*0.04, display: 'flex', borderRadius: props.height*0.025, justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
 
   {/* Logo centralizada */}
-  <img src="/Logoemex.png" alt="Logo" style={{position: 'absolute', left: '50%', transform: 'translateX(-50%)', width: props.width * 0.25, height: 'auto', paddingBottom: props.height*0.01 }}/>
+  <img src="/LogoEmex.png" alt="Logo" style={{position: 'absolute', left: '50%', transform: 'translateX(-50%)', width: props.width * 0.25, height: 'auto', paddingBottom: props.height*0.01 }}/>
 
 
 
   {/* Gauge alinhado à direita */}
-  <div style={{position: 'absolute', right: '-15px'}}>
-    <GaugeComponent width={props.width} height={props.height} min={0} mid={(Math.round(parseFloat(tetochurn) * 0.5154 * 100) / 100).toFixed(2)} max={parseFloat(tetochurn)} aftermax={(Math.round(parseFloat(tetochurn) * 1.2371 * 100) / 100).toFixed(2)} value={parseFloat(churn)}/>
-  </div>
+  {props.width > 0 && props.height > 0 && churn > 0 && tetochurn > 0 && (
+    <div style={{position: 'absolute', right: '-15px'}}>
+      <GaugeComponent width={props.width} height={props.height} min={0} mid={(Math.round(parseFloat(tetochurn) * 0.5154 * 100) / 100).toFixed(2)} max={parseFloat(tetochurn)} aftermax={(Math.round(parseFloat(tetochurn) * 1.2371 * 100) / 100).toFixed(2)} value={parseFloat(churn)}/>
+    </div>
+  )}
 
 </div>
 

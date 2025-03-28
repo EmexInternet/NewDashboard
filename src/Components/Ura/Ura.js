@@ -10,6 +10,7 @@ function Ura(props) {
   const [notificacao, setNotificacao] = useState([])
   const [churn, setChurn] = useState([])
   const [tetochurn, setTetoChurn] = useState([])
+  const [projecaochurn, setProjecaoChurn] = useState([])
   const [fila, setData] = useState([]);
   const [tmes, setData_tmes] = useState([]);
   const [tmas, setData_tmas] = useState([]);
@@ -52,10 +53,10 @@ function Ura(props) {
       .then(data => {
         setChurn(data[0].churn);
         setTetoChurn(data[0].churn_relativo);
+        setProjecaoChurn(data[0].projecao_churn);
       });
       
   }
-
   //Busca a fila de atendimento na API. Retorna um array de objetos.
   const fetchMyAPI = async () => {
     var response = await api.get("../monitor/calls_in_queue");
@@ -253,7 +254,6 @@ function Ura(props) {
       }
       useEffect(() => { setInterval(fetchMyAPI_melhorAgente, 40000) }, [])
 
-
   return (
 <>
 
@@ -297,7 +297,7 @@ function Ura(props) {
   {/* Gauge alinhado à direita */}
   {props.width > 0 && props.height > 0 && churn > 0 && tetochurn > 0 && (
     <div style={{position: 'absolute', right: '-15px'}}>
-      <GaugeComponent width={props.width} height={props.height} min={0} mid={(Math.round(parseFloat(tetochurn) * 0.5154 * 100) / 100).toFixed(2)} max={parseFloat(tetochurn)} aftermax={(Math.round(parseFloat(tetochurn) * 1.2371 * 100) / 100).toFixed(2)} value={parseFloat(churn)}/>
+      <GaugeComponent width={props.width} height={props.height} min={0} mid={(Math.round(parseFloat(tetochurn) * 0.5154 * 100) / 100).toFixed(2)} max={parseFloat(tetochurn)} aftermax={(Math.round(parseFloat(tetochurn) * 1.2371 * 100) / 100).toFixed(2)} churn_projetado={parseFloat(projecaochurn)} value={parseFloat(churn)} />
     </div>
   )}
 

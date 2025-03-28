@@ -7,7 +7,8 @@ const valueFormat = (value) => {
 };
 
 // Componente do Gauge
-const GaugeChart = ({ width, height, min, mid, max, aftermax, value }) => {
+const GaugeChart = ({ width, height, min, mid, max, aftermax, churn_projetado, value}) => {
+  console.log(churn_projetado)
   return (
     <div className="flex flex-col justify-center items-center h-screen">
       
@@ -61,7 +62,7 @@ const GaugeChart = ({ width, height, min, mid, max, aftermax, value }) => {
         marginTop: `-${height * 0.015}px`, 
         textAlign: "center"
       }}>
-        Cancelamentos
+        Projeção: {churn_projetado}%
       </div>
     </div>
   );

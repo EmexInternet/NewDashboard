@@ -87,7 +87,9 @@ function Ura(props) {
     const recebidasAtendimento = response.data.result.stats.stats_all.queues.Atendimento.counts.incoming.start_of_this.day
     const recebidasSuporte = response.data.result.stats.stats_all.queues.Suporte.counts.incoming.start_of_this.day
     // const recebidasSuporte
-    setData_rescebidas(recebidasAtendimento+recebidasSuporte);
+    const recebidasComercial = response.data.result.stats.stats_all.queues.Comercial.counts.incoming.start_of_this.day
+    const recebidasTransbAtendComercial= response.data.result.stats.stats_all.queues.TransbordoAtendComercial.counts.incoming.start_of_this.day
+    setData_rescebidas(recebidasAtendimento+recebidasSuporte+recebidasComercial+recebidasTransbAtendComercial);
   }
   useEffect(() => { setInterval(fetchMyAPI_rescebidas, 40000) }, [])
 
@@ -96,8 +98,10 @@ function Ura(props) {
 
     const atendidasAtendimento = response.data.result.stats.stats_all.queues.Atendimento.counts.incoming_answer.start_of_this.day
     const atendidasSuporte = response.data.result.stats.stats_all.queues.Suporte.counts.incoming_answer.start_of_this.day
+    const atendidasComercial = response.data.result.stats.stats_all.queues.Comercial.counts.incoming_answer.start_of_this.day
+    const atendidasTransbAtendComercial = response.data.result.stats.stats_all.queues.TransbordoAtendComercial.counts.incoming_answer.start_of_this.day
 
-    setData_atendidas(atendidasAtendimento+atendidasSuporte);
+    setData_atendidas(atendidasAtendimento+atendidasSuporte+atendidasComercial+atendidasTransbAtendComercial);
   }
   useEffect(() => { setInterval(fetchMyAPI_atendidas, 40000) }, [])
 
@@ -107,9 +111,11 @@ function Ura(props) {
 
     const abandonadasAtendimento = response.data.result.stats.stats_all.queues.Atendimento.counts.incoming_lost.start_of_this.day
     const abandonadasSuporte = response.data.result.stats.stats_all.queues.Suporte.counts.incoming_lost.start_of_this.day
+    const abandonadasComercial = response.data.result.stats.stats_all.queues.Comercial.counts.incoming_lost.start_of_this.day
+    const abandonadasTransbAtendComercial = response.data.result.stats.stats_all.queues.TransbordoAtendComercial.counts.incoming_lost.start_of_this.day
 
 
-    setData_abandonadas(abandonadasAtendimento+abandonadasSuporte);
+    setData_abandonadas(abandonadasAtendimento+abandonadasSuporte+abandonadasComercial+abandonadasTransbAtendComercial);
   }
   useEffect(() => { setInterval(fetchMyAPI_abandonadas, 40000) }, [])
   ////// A partir daqui busca os indicadores de desempenho da URA
@@ -119,8 +125,10 @@ function Ura(props) {
     var response = await api.get("../monitor/stats_summary");
     const tmeatendimento =  response.data.result.queues.Atendimento.avgs.wait_time.start_of_this.day.avg
     const tmesuporte = response.data.result.queues.Suporte.avgs.wait_time.start_of_this.day.avg
+    const tmecomercial =  response.data.result.queues.Comercial.avgs.wait_time.start_of_this.day.avg
+    const tmetransbatendcomercial = response.data.result.queues.TransbordoAtendComercial.avgs.wait_time.start_of_this.day.avg
 
-    setData_tmes((parseFloat(tmesuporte)+parseFloat(tmeatendimento)).toFixed(2)/2)
+    setData_tmes((parseFloat(tmesuporte)+parseFloat(tmeatendimento)+parseFloat(tmecomercial)+parseFloat(tmetransbatendcomercial)).toFixed(2)/4)
   }
   useEffect(() => { setInterval(fetchMyAPI_tmes, 40000) }, [])
  //console.log(tmes)
@@ -138,8 +146,10 @@ function Ura(props) {
 
     const nivelAtendimento = response.data.result.queues.Atendimento.service_levels.start_of_this.day
     const nivelSuporte = response.data.result.queues.Suporte.service_levels.start_of_this.day
+    const nivelComercial = response.data.result.queues.Comercial.service_levels.start_of_this.day
+    const nivelTransbordoAtendComercial = response.data.result.queues.TransbordoAtendComercial.service_levels.start_of_this.day
 
-    setData_nivel(((parseFloat(nivelAtendimento)+parseFloat(nivelSuporte))).toFixed(2)/2);
+    setData_nivel(((parseFloat(nivelAtendimento)+parseFloat(nivelSuporte)+parseFloat(nivelComercial)+parseFloat(nivelTransbordoAtendComercial))).toFixed(2)/4);
   }
 
   useEffect(() => { setInterval(fetchMyAPI_nivel, 40000) }, [])
@@ -191,7 +201,8 @@ function Ura(props) {
       || value.exten === "3002" && value.device_status === "registered" || value.exten === "3003" && value.device_status === "registered" || value.exten === "3004" && value.device_status === "registered"
       || value.exten === "3005" && value.device_status === "registered"  || value.exten === "3006" && value.device_status === "registered" || value.exten === "3007" && value.device_status === "registered" 
       || value.exten === "3008" && value.device_status === "registered" || value.exten === "3009" && value.device_status === "registered" || value.exten === "3010" && value.device_status === "registered" 
-      || value.exten === "3011" && value.device_status === "registered" 
+      || value.exten === "3011" && value.device_status === "registered" || value.exten === "1015" && value.device_status === "registered" || value.exten === "1016" && value.device_status === "registered" 
+      || value.exten === "1018" && value.device_status === "registered" || value.exten === "1019" && value.device_status === "registered" || value.exten === "1051" && value.device_status === "registered" 
       }); 
 
     // Resgata os agentes que estão pausados e de resto os que estão disponiveis, ordenado de pausado, em ligação e disponivel

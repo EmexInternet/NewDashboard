@@ -235,7 +235,10 @@ function Ura(props) {
     .filter(a => a !== null)
     
 
-      const atendentesPausadosDisponiveis = agentes.slice(0, 5);
+      const atendentesPausadosDisponiveis = agentes.slice(0, 10);
+
+      const primeiros5 = atendentesPausadosDisponiveis.slice(0, 5);
+      const ultimos5 = atendentesPausadosDisponiveis.slice(5, 10);
 
       const emLinha = agentes.filter(
         function(value) {
@@ -390,29 +393,29 @@ function Ura(props) {
       </Carousel>
     </div>
 
-    <div className='container-agentes' style={{width: props.width*0.76, height: props.height*0.56, marginTop: props.height*0.05, marginLeft: props.height*0.04, borderRadius: props.height*0.025, paddingTop: props.height*0.036}}>
+    <div style={{ display: 'flex', gap: props.width * 0.02, marginLeft: props.height * 0.04, marginTop: props.height * 0.05 }}>
 
-      {atendentesPausadosDisponiveis.map(atendente => { 
-
-        return(
-        
-        <div className='agente' style={{borderRadius: props.height*0.025, fontSize: props.height*0.03, height: props.height*0.08, marginBottom: props.height*0.02}} >
-            <div className='nome-ramal' style={{minWidth: props.width * 0.18}} >
-              <span style={{fontSize: props.height*0.027, textTransform: "uppercase"}} >{atendente.agent?.name}</span>
+    {/* Primeiros 5 agentes */}
+    <div className='container-agentes' style={{ width: props.width * 0.37, height: props.height * 0.56, borderRadius: props.height * 0.025, paddingTop: props.height * 0.036 }}>
+      
+      {primeiros5.map(atendente => (
+        <div className='agente' key={atendente.exten} style={{ borderRadius: props.height * 0.025, fontSize: props.height * 0.03, height: props.height * 0.08, marginBottom: props.height * 0.02 }}>
+            <div className='nome-ramal' style={{minWidth: props.width * 0.15}} >
+              <span style={{fontSize: props.height*0.023, textTransform: "uppercase"}} >{atendente.agent?.name}</span>
               {/* <span style={{fontSize: props.height*0.019}} >{atendente.exten}</span> */}
             </div>
 
             {atendente.is_paused ? (
-              <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.023, height: props.height*0.05, minWidth: props.width*0.10, color: '#FFF', background: "#ec2121", marginRight: props.width*0.02, textTransform: "uppercase"}}>
+              <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.020, height: props.height*0.05, minWidth: props.width*0.08, color: '#FFF', background: "#ec2121", marginRight: props.width*0.01, textTransform: "uppercase"}}>
                 Pausado
               </div>
             ) : (
               atendente.status !== 'incall' ? (
-                <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.023, height: props.height*0.05, minWidth: props.width*0.10, color: '#FFF', background: "#588D3A", marginRight: props.width*0.02, textTransform: "uppercase"}}>
+                <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.020, height: props.height*0.05, minWidth: props.width*0.08, color: '#FFF', background: "#588D3A", marginRight: props.width*0.01, textTransform: "uppercase"}}>
                   Disponível
                 </div>
               ) : (
-                <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.023, height: props.height*0.05, minWidth: props.width*0.10, color: '#FFF', background: "#CF721B", marginRight: props.width*0.02, textTransform: "uppercase"}}>
+                <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.020, height: props.height*0.05, minWidth: props.width*0.08, color: '#FFF', background: "#CF721B", marginRight: props.width*0.01, textTransform: "uppercase"}}>
                   Em ligação
                 </div>
               )
@@ -422,8 +425,41 @@ function Ura(props) {
               {converterMilissegundos(atendente.updated_at)}
             </div>
         </div>
-      )})}
+      ))}
+    </div>
+
+     {/* Ultimos 5 agentes */}
+    <div className='container-agentes' style={{ width: props.width * 0.37, height: props.height * 0.56, borderRadius: props.height * 0.025, paddingTop: props.height * 0.036 }}>
       
+      {ultimos5.map(atendente => (
+        <div className='agente' key={atendente.exten} style={{ borderRadius: props.height * 0.025, fontSize: props.height * 0.03, height: props.height * 0.08, marginBottom: props.height * 0.02 }}>
+            <div className='nome-ramal' style={{minWidth: props.width * 0.15}} >
+              <span style={{fontSize: props.height*0.023, textTransform: "uppercase"}} >{atendente.agent?.name}</span>
+              {/* <span style={{fontSize: props.height*0.019}} >{atendente.exten}</span> */}
+            </div>
+
+            {atendente.is_paused ? (
+              <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.020, height: props.height*0.05, minWidth: props.width*0.08, color: '#FFF', background: "#ec2121", marginRight: props.width*0.01, textTransform: "uppercase"}}>
+                Pausado
+              </div>
+            ) : (
+              atendente.status !== 'incall' ? (
+                <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.020, height: props.height*0.05, minWidth: props.width*0.08, color: '#FFF', background: "#588D3A", marginRight: props.width*0.01, textTransform: "uppercase"}}>
+                  Disponível
+                </div>
+              ) : (
+                <div className='agente-status' style={{borderRadius: props.height*0.025, fontSize: props.height*0.020, height: props.height*0.05, minWidth: props.width*0.08, color: '#FFF', background: "#CF721B", marginRight: props.width*0.01, textTransform: "uppercase"}}>
+                  Em ligação
+                </div>
+              )
+            )}
+
+            <div className='agente-tempo' style={{fontSize: props.height*0.034, minWidth: props.width * 0.10}}>
+              {converterMilissegundos(atendente.updated_at)}
+            </div>
+        </div>
+      ))}
+    </div>
 
     </div>
     

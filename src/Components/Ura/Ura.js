@@ -400,7 +400,7 @@ function Ura(props) {
       
       {primeiros5.map(atendente => (
         <div className='agente' key={atendente.exten} style={{ borderRadius: props.height * 0.025, fontSize: props.height * 0.03, height: props.height * 0.08, marginBottom: props.height * 0.02 }}>
-            <div className='nome-ramal' style={{minWidth: props.width * 0.15}} >
+            <div className='nome-ramal' style={{minWidth: props.width * 0.15, marginLeft: '10px'}} >
               <span style={{fontSize: props.height*0.023, textTransform: "uppercase"}} >{atendente.agent?.name}</span>
               {/* <span style={{fontSize: props.height*0.019}} >{atendente.exten}</span> */}
             </div>
@@ -433,7 +433,7 @@ function Ura(props) {
       
       {ultimos5.map(atendente => (
         <div className='agente' key={atendente.exten} style={{ borderRadius: props.height * 0.025, fontSize: props.height * 0.03, height: props.height * 0.08, marginBottom: props.height * 0.02 }}>
-            <div className='nome-ramal' style={{minWidth: props.width * 0.15}} >
+            <div className='nome-ramal' style={{minWidth: props.width * 0.15, marginLeft: '10px'}} >
               <span style={{fontSize: props.height*0.023, textTransform: "uppercase"}} >{atendente.agent?.name}</span>
               {/* <span style={{fontSize: props.height*0.019}} >{atendente.exten}</span> */}
             </div>
